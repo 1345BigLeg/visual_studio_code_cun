@@ -2,11 +2,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelloWorld {
+  
     public static void main(String[] args) {
-
         System.out.println("hello World");
         int[] dp = new int[5 + 1];
+        String a="aba";
+        String b= new StringBuffer(a).reverse().toString();
+        if (a.equals(b))
+        System.out.println(a.length());
+        String test="smiles".substring(1, 5) ;
+        String str = "我爱Java 编程";
+        String result = str.substring(3);
         int aaa=2;
+    }
+   
+    public String longestPalindrome(String s) {
+        String result="";
+        int length=0;
+        for (int center=0;center<s.length()*2-1;center++)
+        {
+       int left=center/2;
+       int right=left+center%2;
+       while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right))
+        {
+           if (right-left+1>length)
+           {
+               length=right-left+1;
+               result=s.substring(left,right+1);
+           }
+           left--;
+           right++;
+           
+         
+       }
+        
+        }
+        return result;
+           }
+   
+    int result=0;
+    boolean huiwen(String s)
+    {
+        String tem=new StringBuffer(s).reverse().toString();
+        if (s.equals(tem))
+          return true;
+        else 
+          return false;
+
     }
     @SuppressWarnings("unchecked")
     public static List<String> generateParenthesis(int n) {
