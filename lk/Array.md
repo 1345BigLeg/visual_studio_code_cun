@@ -625,7 +625,7 @@ vector<int> dailyTemperatures(vector<int>& T) //每日温度
 * 题目描述：给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串  https://leetcode-cn.com/problems/palindromic-substrings/
 >>**学习点1**：String 访问char通过方法 charAt(int),索引不对  
 >>**学习点2**：中心扩展法
-``` Java 
+``` Java 日期20201122
   public int countSubstrings(String s) {
         int result = 0;
         for (int center = 0; center < s.length() * 2 - 1; center++) {
