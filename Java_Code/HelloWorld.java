@@ -15,30 +15,7 @@ public class HelloWorld {
         String result = str.substring(3);
         int aaa=2;
     }
-   
-    public String longestPalindrome(String s) {
-        String result="";
-        int length=0;
-        for (int center=0;center<s.length()*2-1;center++)
-        {
-       int left=center/2;
-       int right=left+center%2;
-       while (left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right))
-        {
-           if (right-left+1>length)
-           {
-               length=right-left+1;
-               result=s.substring(left,right+1);
-           }
-           left--;
-           right++;
-           
-         
-       }
-        
-        }
-        return result;
-           }
+
    
     int result=0;
     boolean huiwen(String s)
