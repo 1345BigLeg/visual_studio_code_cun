@@ -268,7 +268,7 @@ ListNode* deleteNode(ListNode* head, int val)  //删除链表指点元素的节�
 >## <center>例题7   奇偶链表</center>
 * 题目描述：给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性 https://leetcode-cn.com/problems/odd-even-linked-list/  
 >>**学习点1**：双指针 思路搞清
-``` Java 日期20201124    C++ 
+``` Java 日期20201124     C++ 20201121
 public ListNode oddEvenList(ListNode head) {
          if (head==null||head.next==null)
             return head;
