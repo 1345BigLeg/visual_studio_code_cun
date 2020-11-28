@@ -15,8 +15,21 @@ public class HelloWorld {
         String result = str.substring(3);
         int aaa=2;
     }
+  
+    public int removeDuplicates(int[] nums) {
+        if (nums == null)
+            return 0;
+        int i = 0;
+        for (int j = 1; j < nums.length; j++) {
+            if (nums[i] == nums[j])
+                continue;
+            else
+                nums[++i] = nums[j];
+        }
+        return i + 1;
 
-   
+    }
+
     int result=0;
     boolean huiwen(String s)
     {
