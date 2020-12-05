@@ -660,3 +660,54 @@ return result;
         return i + 1;
     }
 ```
+## <center>例题21    无重复字符的最长子串</center>
+* 题目描述：给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度
+>>**学习点1**：滑动窗口 Set集合
+``` Java  20201202 C++ 20201202
+       /*滑动窗口*/
+ public int lengthOfLongestSubstring(String s) {
+        if (s.length()==0)
+         return 0;
+         if (s==" ")
+         return 1;
+       Set<Character> win = new HashSet<>();
+       int result = 0;
+	int next = 0;
+	for (int i = 0; i < s.length(); i++)
+	{
+		while (win.contains(s.charAt(i)))
+		{
+			win.remove(s.charAt(next));
+			next++;
+		}
+		win.add(s.charAt(i));
+		result = Math.max(result,i-next+1);
+	}
+	return result;
+	}
+	   /*解法2 暴力解法*/
+ int lengthOfLongestSubstring(string s) 
+{
+
+	int max = 1;
+	int next = 0;
+	for (int i = 0; i < s.size(); i++)
+	{
+		int temp = 1;
+		for (int j = next; j < i; j++)
+		{
+
+			if (s[i] == s[j])
+			{
+				next = j + 1;
+				break;
+			}
+			else
+				temp++;
+
+		}
+		max = max > temp ? max : temp;
+	}
+	return max;
+}
+```
