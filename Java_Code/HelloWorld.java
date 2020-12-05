@@ -1,5 +1,8 @@
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HelloWorld {
   
@@ -14,8 +17,38 @@ public class HelloWorld {
         String str = "我爱Java 编程";
         String result = str.substring(3);
         int aaa=2;
+        List<List<Integer>> resultw = new ArrayList<>();
+        List<Integer> tt = new ArrayList<>();
+
+          tt.add(2);
+          resultw.add(tt);
+          System.out.println(resultw);
+          tt.clear();
+          System.out.println(resultw);
+          int aa=2;
+
     }
-  
+    public int lengthOfLongestSubstring(String s) 
+    {
+        if (s.length()==0)
+         return 0;
+         if (s==" ")
+         return 1;
+       Set<Character> win = new HashSet<>();
+       int result = 0;
+	int next = 0;
+	for (int i = 0; i < s.length(); i++)
+	{
+		while (win.contains(s.charAt(i)))
+		{
+			win.remove(s.charAt(next));
+			next++;
+		}
+		win.add(s.charAt(i));
+		result = Math.max(result,i-next+1);
+	}
+	return result;
+    }
     public int removeDuplicates(int[] nums) {
         if (nums == null)
             return 0;
