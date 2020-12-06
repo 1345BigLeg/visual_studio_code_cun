@@ -26,7 +26,8 @@ public:
 设从第一次相遇到第二次相遇，设slow走了len步，则fast走了2 * len步，相遇时多走了一圈：环长 = 2*len - len   
 
 * **如何求有环链表中的环连接点的位置** ：
-第一次碰撞点Pos到连接点Join的距离 = 头结点到连接点Join的距离。因此，分别从第一次碰撞点Pos、头指针head开始走，相遇的那个点就是连接点。在环上相遇后，记录第一次相遇点为Pos，连接点为Join，假设头结点到连接点的长度为LenA，连接点到第一次相遇点的长度为x，环长为R。第一次相遇时，slow走的长度S = LenA + x;第一次相遇时，fast走的长度2S = LenA + n * R + x；因此，LenA + x = n * R;　　故LenA = n * R -x;
+解法一：快慢指针第一次碰撞点Pos到连接点Join的距离 = 头结点到连接点Join的距离。因此，分别从第一次碰撞点Pos、头指针head开始走，相遇的那个点就是连接点。在环上相遇后，记录第一次相遇点为Pos，连接点为Join，假设头结点到连接点的长度为LenA，连接点到第一次相遇点的长度为x，环长为R。第一次相遇时，slow走的长度S = LenA + x;第一次相遇时，fast走的长度2S = LenA + n * R + x；因此，LenA + x = n * R;　　故LenA = n * R -x;
+解法二：哈希表 unordered_set;
 >2 **反转链表**：输入一个链表，反转链表后，输出新链表的表头   源代码：20200921
 https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=188&&tqId=35464&rp=1&ru=/activity/oj&qru=/ta/job-code-high-week/question-ranking
 >>* 解法一：栈
