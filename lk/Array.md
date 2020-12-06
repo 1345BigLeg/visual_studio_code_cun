@@ -711,3 +711,28 @@ return result;
 	return max;
 }
 ```
+## <center>例题22    560 和为k的子数组</center>
+* 题目描述：给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数 https://leetcode-cn.com/problems/subarray-sum-equals-k/
+>>**学习点1**：前缀和  **前缀和的定义：nums的第 0 项到当前项的和**
+``` Java   C++ 20201205
+ public int subarraySum(int[] nums, int k) {
+  int len = nums.length;
+        // 计算前缀和数组
+        int[] preSum = new int[len + 1];
+        preSum[0] = 0;
+        for (int i = 0; i < len; i++) {
+            preSum[i + 1] = preSum[i] + nums[i];
+        }
+
+        int count = 0;
+        for (int left = 0; left < len; left++) {
+            for (int right = left; right < len; right++) {
+                if (preSum[right + 1] - preSum[left] == k) {
+                    count++;
+                }
+            }
+        }
+        return count;
+
+    }
+```
