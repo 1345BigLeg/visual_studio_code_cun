@@ -736,3 +736,27 @@ return result;
 
     }
 ```
+## <center>例题22    300 最长上升子序列</center>
+* 题目描述：给定一个无序的整数数组，找到其中最长上升子序列的长度 https://leetcode-cn.com/problems/longest-increasing-subsequence/
+>>**学习点1**：动态规划 在计算dp[i] 之前，我们已经计算出 dp[0…i−1] 的值
+``` Java 20201207 C++ 20201207
+public int lengthOfLIS(int[] nums) 
+    {
+       if (nums.length==0)
+        return 0;
+        int result=1;
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp, 1);
+        for (int i=1;i<nums.length;i++)
+        {
+            for (int j=0;j<i;j++)
+            {
+                if (nums[j]<nums[i])
+                {
+                    dp[i]=Math.max(dp[j]+1,dp[i]);
+                }
+            }
+            result=Math.max(result,dp[i]);
+        }
+        return result
+```
