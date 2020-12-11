@@ -760,3 +760,43 @@ public int lengthOfLIS(int[] nums)
         }
         return result
 ```
+## <center>例题23  15 三数之和 </center>
+* 题目描述：给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组  https://leetcode-cn.com/problems/3sum/
+>>**学习点1**：排序 + 双指针 **当我们需要枚举数组中的两个元素时，如果我们发现随着第一个元素的递增，第二个元素是递减的，例如此题 b+c=0;那么就可以使用双指针的方法，将枚举的时间复杂度从 O(N^2)减少至 O(N)**
+
+``` Java C++ 20201209
+public List<List<Integer>> threeSum(int[] nums) {
+      
+        List<List<Integer>>res=new ArrayList<List<Integer>>();
+        Arrays.sort(nums);
+        for (int first=0;first<nums.length;first++)
+        {
+          
+            if (first>0&&nums[first]==nums[first-1])
+                continue;
+        int third=nums.length-1;
+        for (int second=first+1;second<nums.length;second++)
+        {
+          
+            if (second>first+1&&nums[second]==nums[second-1])
+                 continue;
+           while (second<third&&nums[second]+nums[third]>-nums[first])
+           {
+               third--;
+           }
+           if (second==third)
+             break;
+             if (nums[second]+nums[third]==-nums[first])
+            {
+                List<Integer>temp=new ArrayList<>();
+                temp.add(nums[first]);
+                temp.add(nums[second]);
+                temp.add(nums[third]);
+                res.add(temp);
+                
+            }
+        }
+        }
+        return res;
+    }
+```
