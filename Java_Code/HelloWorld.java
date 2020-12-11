@@ -23,6 +23,8 @@ public class HelloWorld {
           tt.add(2);
           resultw.add(tt);
           System.out.println(resultw);
+          tt.add(8);
+          System.out.println(resultw);
           tt.clear();
           System.out.println(resultw);
           int aa=2;
