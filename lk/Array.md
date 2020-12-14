@@ -803,7 +803,7 @@ public List<List<Integer>> threeSum(int[] nums) {
 ## <center>例题24 152 乘机最大子数组</center>
 * 题目描述：给你一个整数数组 nums ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积 https://leetcode-cn.com/problems/maximum-product-subarray/
 >>**学习点1**：动态规划，这道题根据正负性分类讨论
-``` Java C++
+``` Java C++ 20201211
 public int maxProduct(int[] nums) 
 {
       
