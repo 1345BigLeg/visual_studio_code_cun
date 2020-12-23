@@ -19,7 +19,7 @@ public class HelloWorld {
         int aaa=2;
         List<List<Integer>> resultw = new ArrayList<>();
         List<Integer> tt = new ArrayList<>();
-
+        
           tt.add(2);
           resultw.add(tt);
           System.out.println(resultw);
@@ -29,6 +29,33 @@ public class HelloWorld {
           System.out.println(resultw);
           int aa=2;
 
+    }
+    public int[] intersection(int[] nums1, int[] nums2) //349  给定两个数组，编写一个函数来计算它们的交集
+    {
+    {
+        Set<Integer>ss=new HashSet<>();
+        Set<Integer>tt=new HashSet<>();
+        for (int i=0;i<nums1.length;i++)
+        {
+            ss.add(nums1[i]);
+        }
+        for (int i=0;i<nums2.length;i++)
+        {
+            tt.add(nums2[i]);
+        }
+        Set<Integer>res=new HashSet<>();
+        for (var a:ss)
+        {
+            if (tt.contains(a))
+            res.add(a);
+        }
+        int[] result=new int [res.size()];
+        int index=0;
+         for (var b:res)
+         {
+             result[index++]=b;
+         }
+         return result;
     }
     public int lengthOfLongestSubstring(String s) 
     {
