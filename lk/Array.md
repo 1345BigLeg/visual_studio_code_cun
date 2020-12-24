@@ -821,3 +821,28 @@ public int maxProduct(int[] nums)
         return result;
     }
 ```
+## <center>例题25 从尾到头打印链表</center>
+* 题目描述：输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）  https://leetcode-cn.com/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/
+>>**学习点1**：栈  Java: push()   pop() peek()       C++   push()  pop() front()
+``` Java C++ 20201224
+ public int[] reversePrint(ListNode head) {
+            if (head==null)
+            return new int [0];
+            Stack<Integer>res=new Stack<>();
+            ListNode temp=head;
+            while (temp!=null)
+            {
+               res.push(temp.val);
+               temp=temp.next;
+            }
+            int[] result=new int[res.size()];
+            int index=0;
+            while(!res.empty())
+            {
+                //int a=res.peek();
+                result[index++]=res.pop();
+               // res.pop();
+            }
+            return result;
+    }
+```

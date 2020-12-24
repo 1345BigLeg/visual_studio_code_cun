@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 public class HelloWorld {
   
@@ -29,6 +30,32 @@ public class HelloWorld {
           System.out.println(resultw);
           int aa=2;
 
+    }
+    public class ListNode {
+             int val;
+             ListNode next;
+             ListNode(int x) { val = x; }
+         }
+    public int[] reversePrint(ListNode head) 
+    {
+            if (head==null)
+            return new int [0];
+            Stack<Integer>res=new Stack<>();
+            ListNode temp=head;
+            while (temp!=null)
+            {
+               res.push(temp.val);
+               temp=temp.next;
+            }
+            int[] result=new int[res.size()];
+            int index=0;
+            while(!res.empty())
+            {
+                int a=res.peek();
+                result[index++]=a;
+                res.pop();
+            }
+            return result;
     }
     public int[] intersection(int[] nums1, int[] nums2) //349  给定两个数组，编写一个函数来计算它们的交集
     {
