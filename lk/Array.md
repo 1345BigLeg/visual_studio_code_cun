@@ -846,3 +846,71 @@ public int maxProduct(int[] nums)
             return result;
     }
 ```
+## <center>例题26 和为s的连续正数序列</center>
+* 题目描述：输入一个正整数 target ，输出所有和为 target 的**连续**正整数序列（至少含有两个数）。序列内的数字由小到大排列，不同序列按照首个数字从小到大排列 https://leetcode-cn.com/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/
+>>**学习点1**: 回溯算法 （此题超时），滑动窗口算法
+``` C++ 20201228
+           /*方法一 回溯算法*/
+vector<vector<int>>result;
+vector<int>temp;
+void backtracking(int target, int sum,int index)
+{
+	if (sum == target)
+	{
+		result.push_back(temp);
+		return;
+	}
+	if (sum > target)
+		return;
+	for (int i = index; i < target; i++)
+	{
+		sum += i;
+		if (temp.size() == 0 || (temp.size() > 0 && i - temp.back() == 1))
+		{
+			temp.push_back(i);
+			backtracking(target, sum, i + 1);
+			temp.pop_back();
+			sum -= i;
+		}
+	}
+}
+vector<vector<int>> findContinuousSequence(int target) //此题回溯超时
+{
+	backtracking(target, 0,1);
+	return result;
+}
+            /*方法二 滑动窗口*/
+vector<vector<int>> findContinuousSequence2(int target) //滑动窗口通过
+{
+	int L = 1;
+	int R = 1;
+	int sum = 1;
+	vector<vector<int>>result;
+	while (L <= R && R <= target / 2 + 1)
+	{
+		if (sum < target)
+		{
+			R++;
+			sum += R;
+		}
+		else if (sum > target)
+		{
+			sum -= L;
+			L++;
+		}
+		else
+		{
+			vector<int>temp;
+			for (int i = L; i <= R; i++)
+			{
+				temp.push_back(i);
+			}
+			result.push_back(temp);
+			sum -= L;
+			L++;
+		}
+
+	}
+	return result;
+}
+```
