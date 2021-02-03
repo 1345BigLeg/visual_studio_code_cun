@@ -914,3 +914,28 @@ vector<vector<int>> findContinuousSequence2(int target) //滑动窗口通过
 	return result;
 }
 ```
+## <center>例题27 两数相加</center>
+* 题目描述：给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。请你将两个数相加，并以相同形式返回一个表示和的链表。https://leetcode-cn.com/problems/add-two-numbers/
+>>**学习点1**: 维护一个进位变量int wei;
+```C++
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) 
+    {
+        int wei=0;
+        ListNode* t=new ListNode(-1);
+        ListNode*p=t;
+        while (l1!=nullptr||l2!=nullptr||wei!=0)
+        {
+          int l1val=l1!=nullptr?l1->val:0;
+          int l2val=l2!=nullptr?l2->val:0;
+          int temsum=l1val+l2val+wei;
+          wei=temsum/10;
+          t->next=new ListNode(temsum%10);
+          t=t->next;
+          if (l1)
+          l1=l1->next;
+          if(l2)
+          l2=l2->next;
+        }
+        return p->next;
+    }
+```
