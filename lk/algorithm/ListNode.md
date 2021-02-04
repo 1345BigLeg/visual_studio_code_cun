@@ -303,3 +303,33 @@ public ListNode swapPairs(ListNode head) {
         return res;
     }
 ```
+>## <center>例题9   链表的中间节点</center>
+* 题目描述：给定一个头结点为 head 的非空单链表，返回链表的中间结点，如果有两个中间结点，则返回第二个中间结点https://leetcode-cn.com/problems/middle-of-the-linked-list/
+>>**学习点1**：快慢指针
+``` C++ 方法一 快慢指针
+ ListNode* middleNode(ListNode* head) 
+    {
+       ListNode* slow=head;
+       ListNode* fast=head;
+       while (fast&&fast->next)
+       {
+           slow=slow->next;
+           fast=fast->next->next;           
+       }
+       return slow;
+    }
+```
+``` C++ 方法二 unordered_map 
+ListNode* middleNode(ListNode* head)  // 876链表的中间节点
+{    
+	int i = 0;
+	unordered_map<int, ListNode*>my;
+	while (head)
+	{
+		my.insert(pair<int, ListNode*>(i, head));
+		i++;
+		head = head->next;
+	}
+	return my[i / 2];
+}
+```
