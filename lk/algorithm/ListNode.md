@@ -333,3 +333,59 @@ ListNode* middleNode(ListNode* head)  // 876链表的中间节点
 	return my[i / 2];
 }
 ```
+>## <center>例题10   移除链表元素</center>
+* 题目描述：删除链表中等于给定值 val 的所有节点 https://leetcode-cn.com/problems/remove-linked-list-elements/
+>>**学习点1**：
+``` C++ 方法一  删除头结点另做考虑
+ListNode* removeElements(ListNode* head, int val) 
+    {
+        if (head==nullptr)
+              return 0;
+        while (head!=nullptr)
+        {
+           if (head->val==val)
+             head=head->next;
+            else 
+                break;
+        }
+        if (head==nullptr)
+              return 0;
+        ListNode* be=head;
+        ListNode* af = head->next;
+        while (af!=nullptr)
+        {
+            if (af->val==val)
+            {
+                be->next=af->next;
+                af=af->next;
+            }
+            else
+            {
+            be=af;
+            af=af->next;
+            }
+        }
+        
+        return head;
+    }
+```
+``` C++ 方法二 添加一个虚拟头结点
+ListNode* removeElements(ListNode* head, int val) 
+    {
+        ListNode* dummyNode=new ListNode(-1);
+        dummyNode->next=head;
+        ListNode* pre=dummyNode;
+           while (pre->next)
+           {
+                if (pre->next->val==val)
+                {
+                    pre->next=pre->next->next;
+                }
+                else
+                {
+                    pre=pre->next;
+                }
+           }
+        return dummyNode->next;
+    }
+```
