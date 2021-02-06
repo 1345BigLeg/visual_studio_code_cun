@@ -389,3 +389,57 @@ ListNode* removeElements(ListNode* head, int val)
         return dummyNode->next;
     }
 ```
+>## <center>例题11   删除排序链表中的重复元素</center>
+* 题目描述：给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/
+>>**学习点1**：
+``` C++
+ListNode* deleteDuplicates(ListNode* head) //删除排序链表中的重复元素
+{
+	if (head == nullptr)
+		return nullptr;
+	ListNode* cur = head;
+	while (cur->next)
+	{
+		if (cur->val == cur->next->val)
+		{
+			
+			cur->next = cur->next->next;
+		}
+		else
+		{
+			cur = cur->next;
+		}
+	}
+	return head;
+}
+```
+>## <center>例题11   删除排序链表中的重复元素 2</center>
+* 题目描述：给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现的数字 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
+>>**学习点1**：哑结点 思路理清
+``` C++
+if (head == nullptr||head->next==nullptr)
+		return head;
+	ListNode* dummyNode = new ListNode(-1);
+	dummyNode->next = head;
+	ListNode* pre = dummyNode;
+	ListNode* cur = head;
+	while (cur&&cur->next)
+	{		
+		if (pre->next->val != cur->next->val)
+		{
+			pre = pre->next;
+			cur = cur->next;
+		}
+		else
+		{
+			while (cur->next&&pre->next->val == cur->next->val)
+			{
+				cur = cur->next;
+			}
+			pre->next = cur->next;
+			cur = cur->next;
+		}
+	}
+
+	return dummyNode->next;
+```
