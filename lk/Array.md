@@ -939,3 +939,23 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
         return p->next;
     }
 ```
+## <center>例题28 使用最小花费爬楼梯</center>
+* 题目描述：数组的每个下标作为一个阶梯，第 i 个阶梯对应着一个非负数的体力花费值 cost[i]（下标从 0 开始）
+每当你爬上一个阶梯你都要花费对应的体力值，一旦支付了相应的体力值，你就可以选择向上爬一个阶梯或者爬两个阶梯。请你找出达到楼层顶部的最低花费。在开始时，你可以选择从下标为 0 或 1 的元素作为初始阶梯 https://leetcode-cn.com/problems/min-cost-climbing-stairs
+>>**学习点1**: 动态规划 读懂题意，确定dp[i]的意义是什么
+``` C++
+int minCostClimbingStairs(vector<int>& cost)   // 使用最小花费爬楼梯
+{
+	if (cost.empty())            
+		return 0;
+	vector<int>dp(cost.size()); 
+	dp[0] = cost[0];
+	if (cost.size() >= 1)
+		dp[1] = cost[1];
+	for (int i = 2; i < cost.size(); i++)
+	{
+		dp[i] = min(dp[i-1]+cost[i],dp[i-2]+cost[i]);
+	}
+	return min(dp[cost.size() -1],dp[cost.size()-2]);
+}
+```

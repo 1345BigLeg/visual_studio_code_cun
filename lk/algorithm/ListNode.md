@@ -443,3 +443,31 @@ if (head == nullptr||head->next==nullptr)
 
 	return dummyNode->next;
 ```
+>## <center>例题12   反转链表 2</center>
+* 题目描述：反转从位置 m 到 n 的链表。请使用一趟扫描完成反转 https://leetcode-cn.com/problems/reverse-linked-list-ii/
+>>**学习点1**：反转链表前N个节点
+>>**学习点2**：递归的理解  https://leetcode-cn.com/problems/reverse-linked-list-ii/solution/bu-bu-chai-jie-ru-he-di-gui-di-fan-zhuan-lian-biao/
+``` C++
+ListNode* proc = nullptr;
+ListNode* reverseN(ListNode* head, int n)                //反转链表前n个节点
+{
+	if (head == nullptr)
+		return nullptr;
+	if (n == 1)
+	{
+		proc = head->next;
+		return head;
+	}
+	ListNode* dada = reverseN(head->next,n-1);
+	head->next->next = head;
+	head->next = proc;
+	return dada;
+}
+ListNode* reverseBetween(ListNode* head, int m, int n) //反转从位置m到n的链表
+{
+	if (m == 1)
+		return reverseN(head,n);
+	head->next = reverseBetween(head->next,m-1,n-1);
+	return head;
+}
+```
