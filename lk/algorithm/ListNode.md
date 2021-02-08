@@ -471,3 +471,47 @@ ListNode* reverseBetween(ListNode* head, int m, int n) //反转从位置m到n的
 	return head;
 }
 ```
+>## <center>例题13   旋转链表 </center>
+* 题目描述：给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数https://leetcode-cn.com/problems/rotate-list/
+>>**学习点1**：
+``` C++ 
+int num(ListNode* head)    //求出链表节点个数
+{
+	int i = 0;
+	ListNode* temp = head;
+	while (temp)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return i;
+}
+ListNode* rotateRight(ListNode* head, int k) //旋转链表
+{
+	if (head == nullptr || k == 0)
+		return head;
+	int size = num(head);
+	int u = k % size;
+	ListNode* temp = head;
+	int i = 1;
+	while (temp&&i < size - u)
+	{
+		temp = temp->next;
+		i++;
+	}
+	ListNode* res = temp->next;
+	if (res == nullptr)
+	{
+		return head;
+	}
+	temp->next = nullptr;
+	ListNode* dd = res;
+	while (dd->next)
+	{
+		dd = dd->next;
+	}
+	dd->next = head;
+	return res;
+
+}
+```
