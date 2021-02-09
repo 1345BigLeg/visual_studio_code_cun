@@ -515,3 +515,64 @@ ListNode* rotateRight(ListNode* head, int k) //旋转链表
 
 }
 ```
+## <center>例题14 两数相加</center>
+* 题目描述：给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。请你将两个数相加，并以相同形式返回一个表示和的链表。https://leetcode-cn.com/problems/add-two-numbers/
+>>**学习点1**: 维护一个进位变量int wei;
+```C++
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) 
+    {
+        int wei=0;
+        ListNode* t=new ListNode(-1);
+        ListNode*p=t;
+        while (l1!=nullptr||l2!=nullptr||wei!=0)
+        {
+          int l1val=l1!=nullptr?l1->val:0;
+          int l2val=l2!=nullptr?l2->val:0;
+          int temsum=l1val+l2val+wei;
+          wei=temsum/10;
+          t->next=new ListNode(temsum%10);
+          t=t->next;
+          if (l1)
+          l1=l1->next;
+          if(l2)
+          l2=l2->next;
+        }
+        return p->next;
+    }
+```
+## <center>例题14 两数相加 2</center>
+* 题目描述：给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。你可以假设除了数字 0 之外，这两个数字都不会以零开头
+>>**学习点1**:把所有数字压入栈中，再依次取出相加。计算过程中需要注意进位的情况
+``` C++ 
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
+{
+	stack<int>s1, s2;
+	while (l1)
+	{
+		s1.push(l1->val);
+		l1 = l1->next;
+	}
+	while (l2)
+	{
+		s2.push(l2->val);
+		l2 = l2->next;
+	}
+	int carry = 0;
+	ListNode* ans = nullptr;
+	while (!s1.empty() || !s2.empty() || carry != 0)
+	{
+		int a = s1.empty() ? 0 : s1.top();
+		int b = s2.empty() ? 0 : s2.top();
+		if (!s1.empty()) s1.pop();
+		if (!s2.empty()) s2.pop();
+		int cur = a + b + carry;
+		//int cur = (l + r + carry) % 10;
+		carry = cur / 10;	
+		cur %= 10;
+		ListNode* curnode = new ListNode(cur);
+		curnode->next = ans;
+		ans = curnode;
+	}
+	return ans;
+}
+```
