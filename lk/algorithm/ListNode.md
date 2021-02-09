@@ -576,3 +576,70 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 	return ans;
 }
 ```
+## <center>例题15 k个一组翻转链表</center>
+* 题目描述：给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序 https://leetcode-cn.com/problems/reverse-nodes-in-k-group/
+>>**学习点1**: 递归 链表
+``` C++ 
+int num(ListNode* head)     //计算节点个数
+{
+	int i = 0;
+	ListNode* temp = head;
+	while (temp)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return i;
+}
+ListNode* reverseTopN(ListNode* head, int n)        //反转链表前n个节点 方法一
+{
+	ListNode* prev = nullptr;
+	// 当前考察的节点
+	ListNode* cur = head;
+	// num小于n，则表示当前节点需要反转
+	for (int num = 0; num < n; num++) {
+		// 当前节点的下一个节点
+		ListNode* next = cur->next;
+		// 当前节点的后继指针指向prev
+		cur->next = prev;
+		// prev指向当前节点
+		// 表示其是next节点反转后的前一个节点
+		prev = cur;
+		// cur指向下一个节点
+		// 表示下一个节点是待反转节点
+		cur = next;
+	}
+	return prev;
+}
+ListNode* reverseN(ListNode* head, int n)                //反转链表前n个节点 方法二
+{
+if (head == nullptr)
+		return nullptr;
+	if (n == 1)
+	{
+		return head;
+	}
+	ListNode* dada = reverseN(head->next,n-1);
+	head->next->next = head;
+	
+	return dada;
+}
+    ListNode* reverseKGroup(ListNode* head, int k) 
+    {
+        int nodesize = num(head); //节点个数
+	if (nodesize < k)
+		return head;
+	int i = 0;
+	ListNode* temp = head;
+	while (temp&&i < k)
+	{
+		temp = temp->next;
+		i++;
+	}
+	ListNode* proc=reverseKGroup(temp,k);
+	ListNode* res = reverseN(head,k);         //翻转前k个节点
+	head->next = proc;
+	return res;
+    
+    }
+```
