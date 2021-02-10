@@ -959,3 +959,43 @@ int minCostClimbingStairs(vector<int>& cost)   // 使用最小花费爬楼梯
 	return min(dp[cost.size() -1],dp[cost.size()-2]);
 }
 ```
+## <center>例题29 按摩师</center>
+* 题目描述：一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。https://leetcode-cn.com/problems/the-masseuse-lcci/
+>>**学习点1**:动态规划
+``` C++
+int massage(vector<int>& nums)
+{
+	if (nums.empty())
+		return 0;
+	int size = nums.size();;
+	int *dp = new int[size];
+	dp[0] = nums[0];
+	if (size >= 2)
+	{
+		dp[1] = max(dp[0], nums[1]);
+	}
+	for (int i = 2; i < size; i++)
+	{
+		dp[i] = max(dp[i-1],nums[i]+dp[i-2]);
+	}
+		return dp[size-1];
+}
+```  
+## <center>例题30 买卖股票的最佳时机2</center>
+* 题目描述：给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票） https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/ 
+>>**学习点1**:
+``` C++ 
+int maxProfit2(vector<int>& prices) 
+{
+	int ans = 0;
+	for (int i = 1; i <= prices.size() - 1; i++) //扫描一遍 只要后一天比前一天大 就把这两天的差值加一下,因为可以多次买卖一支股票
+	{
+		if (prices[i] > prices[i - 1])
+		{
+			ans += prices[i] - prices[i - 1];
+		}
+	}
+	return ans;
+}
+```
+
