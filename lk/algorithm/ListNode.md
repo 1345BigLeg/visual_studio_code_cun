@@ -643,3 +643,37 @@ if (head == nullptr)
     
     }
 ```
+## <center>例题16 分隔链表</center>
+* 题目描述：给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。你应当 保留 两个分区中每个节点的初始相对位置。https://leetcode-cn.com/problems/partition-list/
+>>**学习点1**:维护两个链表 小于指定值的链表 和 大于指定值的链表，遍历完原链表后，我们只要将 \textit{small}small 链表尾节点指向 \textit{large}large 链表的头节点即能完成对链表的分隔
+``` C++
+ListNode* partition(ListNode* head, int x)  //分割链表
+{
+	if (head == nullptr)
+		return nullptr;
+	ListNode* smallNode = new ListNode(-1);  //存储小于指定值的链表
+	ListNode* dd = smallNode;
+	ListNode* bigNode = new ListNode(-1);    //存储大于指定值的链表
+	ListNode* cc = bigNode;
+	ListNode* temp = head;
+	while (temp)
+	{
+		if (temp->val < x)
+		{
+			smallNode->next = temp;
+			temp = temp->next;
+			smallNode = smallNode->next;						
+		}
+		else
+		{
+			bigNode->next = temp;
+			temp = temp->next;
+			bigNode = bigNode->next;						
+		}
+	}
+	 /* 将两个链表拼成一个新的*/
+	bigNode->next = nullptr;  
+	smallNode->next = cc->next;
+		return dd->next;
+}
+```
