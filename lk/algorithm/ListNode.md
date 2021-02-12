@@ -677,3 +677,49 @@ ListNode* partition(ListNode* head, int x)  //分割链表
 		return dd->next;
 }
 ```
+## <center>例题17 对链表进行插入排序</center>
+* 题目描述： https://leetcode-cn.com/problems/insertion-sort-list/
+``` C++
+ListNode* insert(ListNode* head, ListNode* cha)     // 将只有一个链表节点的 cha 插入到有序链表head里
+{
+	if (head == nullptr)
+		return nullptr;
+	ListNode* dummyNode = new ListNode(-1);
+	ListNode* pre = dummyNode;
+	pre->next = head;
+	while (pre->next)
+	{
+		if (pre->next->val > cha->val)
+		{
+			cha->next = pre->next;
+			pre->next = cha;
+			break;
+		}
+		else
+		{
+			pre = pre->next;
+			if (pre->next == nullptr)
+			{
+				pre->next = cha;
+				break;
+			}
+		}
+	}
+	return dummyNode->next;
+}
+ListNode* insertionSortList(ListNode * head)  //对链表进行插入排序
+{
+	if (head == nullptr)
+		return nullptr;
+	ListNode* newhead = new ListNode(head->val);
+	newhead->next = nullptr;
+	while (head->next)
+	{
+		ListNode* cha = new ListNode(head->next->val); 
+		newhead=insert(newhead,cha);
+		head = head->next;
+	}
+	ListNode* tmp = newhead;
+	return newhead;
+}
+```

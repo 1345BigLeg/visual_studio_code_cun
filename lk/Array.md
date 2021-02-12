@@ -1021,3 +1021,55 @@ string longestCommonPrefix(vector<string>& strs)  //最长公共前缀
 	return res;
 }
 ```
+## <center>例题32 移除元素</center>
+* 题目描述：给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组 https://leetcode-cn.com/problems/remove-element/  
+>>**学习点1**:
+``` C++
+int removeElement(vector<int>& nums, int val)  //移除元素
+{
+	if (nums.empty())
+		return 0;
+	int res = 0;
+	for (int i = 0; i < nums.size(); i++)
+	{
+		if (nums[i] != val)
+		{
+			nums[res++] = nums[i];
+		}
+
+	}
+	return res;
+}
+```
+## <center>例题33 回文数</center>
+* 题目描述：给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。例如，121 是回文，而 123 不是https://leetcode-cn.com/problems/palindrome-number
+>>**学习点1**:
+``` C++
+bool isPalindrome(int x)  //回文数
+{
+	/* 方法一：if (x < 0)
+		return false;
+
+	string b = to_string(x);
+	reverse(b.begin(), b.end());
+	int c = atoi(b.c_str());
+	if (c == x)
+		return true;
+	else
+		return false;*/
+	 /* 方法二*/
+	if (x < 0)
+		return false;
+	int re = 0;
+	double y = 0;   // y是int 执行不通过
+	int copyx = x;
+	while (copyx)
+	{
+		re = copyx % 10;
+		y = y * 10 + re;
+		copyx = copyx / 10;
+	}
+	return y == x;
+}
+```
+
