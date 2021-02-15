@@ -723,3 +723,29 @@ ListNode* insertionSortList(ListNode * head)  //对链表进行插入排序
 	return newhead;
 }
 ```
+## <center>例题18 移除重复节点</center>
+* 节点描述：编写代码，移除未排序链表中的重复节点。保留最开始出现的节点 https://leetcode-cn.com/problems/remove-duplicate-node-lcci/
+>>**学习点1**:
+``` C++ 
+ListNode* removeDuplicateNodes(ListNode* head) //  移除重复节点
+{
+	if (head == nullptr)
+		return nullptr;
+	unordered_set<int>tree;
+	ListNode* tmp = head;
+	tree.insert(tmp->val);
+	while (tmp->next)
+	{
+		if (tree.find(tmp->next->val) == tree.end())
+		{
+			tree.insert(tmp->next->val);
+			tmp = tmp->next;
+		}
+		else
+		{
+			tmp->next = tmp->next->next;
+		}
+	}
+	return head;
+}
+```
