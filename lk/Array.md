@@ -1102,5 +1102,57 @@ void nextPermutation(vector<int>& nums) //下一个排列
 	reverse(nums.begin()+i+1,nums.end());
 }
 ```
+## <center>例题35 跳跃游戏</center>
+* 题目描述：给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个下标https://leetcode-cn.com/problems/jump-game/
+>>**学习点1**: 方法一 思路：如果所有元素都不为0， 那么一定可以跳到最后；从后往前遍历，如果遇到nums[i] = 0，就找i前面的元素j，使得nums[j] > i - j。如果找不到，则不可能跳跃到num[i+1]，返回false
+>>**学习点2**: 方法二 参考答案，如果一个位置能够到达，那么这个位置左侧所有位置都能到达
+``` C++  
+ /*方法一*/
+ bool canJump(vector<int>& nums) 
+    {
+      if (nums.empty()||nums.size()==1)
+		return true;
+bool res = true;	
+	for (int i = nums.size() - 1; i >= 0; i--)
+	{
+		bool temp = false;
+		if (nums[i] == 0)
+		{
+			for (int j = i - 1; j >= 0; j--)
+			{
+				if (i<nums.size()-1&&nums[j] > i - j)
+				{
+					temp = true;
+					break;
+				}
+                if (i==nums.size()-1&&nums[j] >= i - j)  //最后一个元素为0 判断条件改变了
+				{
+					temp = true;
+					break;
+				}
+			}
+			if (temp == false)
+			{
+				res = false;
+				break;
+			}
+			
+		}
+	}
+	return res;
+    }
+
+	/*方法二*/
+	bool canJump(vector<int>& nums) 
+{
+	int k = 0;
+	for (int i = 0; i < nums.size(); i++)
+	{
+		if (i > k) return false;
+		k = max(k, i + nums[i]);
+	}
+	return true;
+}
+```
 
 
