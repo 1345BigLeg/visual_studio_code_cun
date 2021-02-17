@@ -1154,5 +1154,36 @@ bool res = true;
 	return true;
 }
 ```
+## <center>例题36 合并区间</center>
+* 题目描述：以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 https://leetcode-cn.com/problems/merge-intervals/
+>>**学习点1**: 首先，我们将列表中的区间按照左端点升序排序。然后我们将第一个区间加入 merged 数组中，并按顺序依次考虑之后的每个区间：
+如果当前区间的左端点在数组 merged 中最后一个区间的右端点之后，那么它们不会重合，我们可以直接将这个区间加入数组 merged 的末尾；
+否则，它们重合，我们需要用当前区间的右端点更新数组 merged 中最后一个区间的右端点，将其置为二者的较大值
+``` C++
+vector<vector<int>> merge(vector<vector<int>>& intervals)
+{
+	if (intervals.empty())
+		return {};
+	vector<vector<int>>res; 
+	sort(intervals.begin(), intervals.end(), [](vector<int>&a,vector<int>&b) 
+	{
+		
+			return a.front() < b.front();
+	});
+	res.push_back(intervals[0]);
+	for (int i = 1; i < intervals.size(); i++)
+	{
+		if (intervals[i].front() <= res.back().back())
+		{
+			res.back().back() = max(res.back().back(),intervals[i].back());
+		}
+		else
+			res.push_back(intervals[i]);
+	}
+	return res;
+
+}
+```
+
 
 
