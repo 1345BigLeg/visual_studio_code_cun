@@ -1184,6 +1184,65 @@ vector<vector<int>> merge(vector<vector<int>>& intervals)
 
 }
 ```
-
+## <center>例题37 罗马数字转整数</center>
+* 题目描述：https://leetcode-cn.com/problems/roman-to-integer/ 
+>>**学习点1**:首先建立一个HashMap来映射符号和值，然后对字符串从左到右来，如果当前字符代表的值不小于其右边，就加上该值；否则就减去该值。以此类推到最左边的数，最终得到的结果即是答案
+``` C++
+int romanToInt(string s) //罗马数字转整数
+{
+	int res=0;
+	unordered_map<char,int>roman;
+	roman['I'] = 1;
+	roman['V'] = 5;
+	roman['X'] = 10;
+	roman['L'] = 50;
+	roman['C'] = 100;
+	roman['D'] = 500;
+	roman['M'] = 1000;
+	for (int i=0;i<s.size();i++)
+	{
+		if (roman[s[i]] < roman[s[i + 1]])
+		{
+			res = res - roman[s[i]]+roman[s[i + 1]];
+			i++;
+		}
+		else
+		{
+			res=res + roman[s[i]] ;
+		}
+	}
+	return res;
+}
+```
+## <center>例题38 加一</center>
+* 题目描述：给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。你可以假设除了整数 0 之外，这个整数不会以零开头 https://leetcode-cn.com/problems/plus-one/
+>>**学习点1**:
+``` C++
+vector<int> plusOne(vector<int>& digits)  // 加一
+{
+	vector<int>res(digits.size() + 1, 0);
+	int size = digits.size();
+	bool ind=false;	
+	for (int i = size - 1; i >= 0; i--)
+	{
+		if (digits[i] != 9)
+		{
+			digits[i] += 1;
+			ind = true;
+			return digits;
+		}
+		if (digits[i] == 9)
+		{
+			digits[i] = 0;
+		}
+		
+	}
+	if (ind == false)
+	{
+		res.front() = 1;
+	}
+	return res;
+}
+```
 
 

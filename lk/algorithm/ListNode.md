@@ -748,4 +748,38 @@ ListNode* removeDuplicateNodes(ListNode* head) //  移除重复节点
 	}
 	return head;
 }
+``` 
+## <center>例题19 链表求和</center>
+* 题目描述：给定两个用链表表示的整数，每个节点包含一个数位。这些数位是反向存放的，也就是个位排在链表首部。编写函数对这两个整数求和，并用链表形式返回结果 https://leetcode-cn.com/problems/sum-lists-lcci/
+>>**学习点1**:
+``` C++
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) //链表求和
+{
+	int carry = 0;
+	ListNode* res = new ListNode(-1);
+	ListNode* ss = res;
+	while (l1 != nullptr || l2 != nullptr || carry != 0)
+	{
+		int l = l1 == nullptr ? 0 : l1->val;
+		int r = l2 == nullptr ? 0 : l2->val;
+		ListNode*tem = new ListNode((l + r + carry) % 10);
+		carry = (l + r + carry) / 10;
+		res->next = tem;
+		res = res->next;
+		if (l1 != nullptr)
+			l1 = l1->next;
+		if (l2 != nullptr)
+			l2 = l2->next;
+		if (l1 == nullptr&&l2 == nullptr&&carry == 0)
+			tem->next = nullptr;
+
+	}
+	return ss->next;
+}
 ```
+
+
+
+
+
+
