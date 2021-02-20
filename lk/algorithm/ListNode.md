@@ -777,7 +777,30 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) //链表求和
 	return ss->next;
 }
 ```
-
+## <center>例题20 重排链表</center>
+* 题目描述：给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→… 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换 https://leetcode-cn.com/problems/reorder-list/
+>>**学习点1**: 递归
+``` C++
+void digui(ListNode* root)
+    {
+        if (root==nullptr||root->next==nullptr||root->next->next==nullptr)
+        return;
+        ListNode* temp=root;
+        while (temp->next->next)
+        {
+            temp=temp->next;
+        }
+        temp->next->next=root->next;
+        root->next=temp->next;
+        temp->next=nullptr;
+        digui(root->next->next);
+    }
+    void reorderList(ListNode* head) 
+    {
+         digui(head);
+    }
+```
 
 
 

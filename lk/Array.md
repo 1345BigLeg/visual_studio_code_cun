@@ -1244,5 +1244,48 @@ vector<int> plusOne(vector<int>& digits)  // 加一
 	return res;
 }
 ```
+## <center>例题39 剪绳子</center>
+* 题目描述：给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 k[0],k[1]...k[m-1] 。请问 k[0]*k[1]*...*k[m-1] 可能的最大乘积是多少 https://leetcode-cn.com/problems/jian-sheng-zi-lcof/ 
+>>**学习点1**:动态规划
+``` C++
+int cuttingRope(int n) //剪绳子
+{
+	vector<int>dp(n + 1); // dp[i] 表示长度为i的剪短后的最大乘积 （dp[i]默认都为0）
+	dp[1] = 0;
+	dp[2] = 1;
+	for (int i = 3; i <= n; i++)
+	{
+		for (int j = 1; j < i; j++)
+	{
+		dp[i] = max(dp[i], max((i - j)*j, j*dp[i - j])); // 长度为i的绳子，减掉j,比较 (i-j)*j 和 j*dp[i-j] 和 上次求出的dp[i],取最大值
+	}
+	}
 
 
+	return dp[n];
+}
+```
+## <center>例题40 盛最多水的容器</center>
+* 题目描述：给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水 https://leetcode-cn.com/problems/container-with-most-water/
+>>**学习点1**: 双指针 见链接的题解
+``` C++
+ int maxArea(vector<int>& height)
+    {
+    int res = 0;
+	int size = height.size();
+    int first=0;
+    int last=size-1;
+	while (first<last)
+    {
+        res=max(res,min(height[first],height[last])*(last-first));
+        if (height[first]<height[last]) 
+        {
+            first++;
+        }
+        else
+        {
+            last--;
+        }
+    }
+    return res;
+```
