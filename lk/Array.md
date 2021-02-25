@@ -1267,7 +1267,7 @@ int cuttingRope(int n) //剪绳子
 ```
 ## <center>例题40 盛最多水的容器</center>
 * 题目描述：给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水 https://leetcode-cn.com/problems/container-with-most-water/
->>**学习点1**: 双指针 见链接的题解
+>>**学习点1**: 双指针 见链接的题解 (在移动的过程中不断消去不可能成为最大值的状态)
 ``` C++
  int maxArea(vector<int>& height)
     {
@@ -1288,4 +1288,196 @@ int cuttingRope(int n) //剪绳子
         }
     }
     return res;
+```
+## <center>例题41 顺时针打印矩阵</center>
+* 题目描述：输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字 https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/
+>>**学习点1**:  
+``` C++
+vector<int> spiralOrder(vector<vector<int>>& matrix) //顺时针打印矩阵
+{
+	if (matrix.empty())
+		return {};	
+	int rows = matrix.size();
+	int cols = matrix[0].size();
+	vector<int>res(rows*cols);
+	int top = 0;
+	int left = 0;
+	int right = cols - 1;
+	int bottom = rows - 1;
+	int index = 0;
+	while (true)
+	{
+		for (int i = left; i <=right; i++)  // 从左到右
+		{
+			res[index++] = matrix[top][i];
+		}
+		if (++top > bottom)
+		{
+			break;
+		}
+		for (int i = top; i <= bottom; i++) //从上到下
+		{
+			res[index++] = matrix[i][right];
+		}
+		if (--right < left)
+		{
+			break;
+		}
+		for (int i = right; i >= left; i--) //从右到左
+		{
+			res[index++] = matrix[bottom][i];
+		}
+		if (--bottom < top)
+		{
+			break;
+		}
+		for (int i = bottom; i >=top; i--) //从下到上
+		{
+			res[index++] = matrix[i][left];
+		}
+		if (++left > right)
+		{
+			break;
+		}
+	}
+	return res;
+}
+```
+## <center>例题42 接雨水</center>
+*  题目描述：给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水https://leetcode-cn.com/problems/trapping-rain-water/
+>>**学习点1**:  对于数组中的每个元素，我们找出下雨后水能达到的最高位置，等于两边最大高度的较小值减去当前高度的值，方法二是对方法一的优化，在暴力方法中，我们仅仅为了找到最大值每次都要向左和向右扫描一次。但是我们可以提前存储这个值
+``` C++ 方法一
+int trap(vector<int>& height)  //时间复杂度 O(n^2)
+{
+	if (height.empty())
+		return 0;
+	int res = 0;
+	int size = height.size();
+	for (int i = 1; i < size - 1; i++)
+	{
+		int left_max = 0;
+		int right_max = 0;
+		for (int j = 0; j <= i; j++)
+		{
+			left_max = max(left_max,height[j]);
+		}
+		for (int k = i; k < size; k++)
+		{
+			right_max = max(right_max,height[k]);
+		}
+		res += min(left_max, right_max) - height[i];
+	}
+	return res;
+}
+```
+``` C++ 方法二
+int trap(vector<int>& height) //在暴力方法中，我们仅仅为了找到最大值每次都要向左和向右扫描一次。但是我们可以提前存储这个值，时间复杂度 O(n)
+{
+        if (height.empty())
+        return 0;
+        int res=0;
+        int size=height.size();
+        vector<int>left_max(size,0);
+        vector<int>right_max(size,0);
+        left_max[0]=height[0];
+        right_max[size-1]=height[size-1];
+        for (int i=1;i<size;i++)
+        {
+            left_max[i]=max(height[i],left_max[i-1]);
+        }
+        for (int i=size-2;i>=0;i--)
+        {
+            right_max[i]=max(right_max[i+1],height[i]);
+        }
+        for (int i=1;i<size-1;i++)
+        {
+            res+=min(right_max[i],left_max[i])-height[i];
+        }
+        return res;
+    }
+```
+## <center>例题43 岛屿数量</center>
+* 题目描述：给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。此外，你可以假设该网格的四条边均被水包围 https://leetcode-cn.com/problems/number-of-islands/
+>>**学习点1**: 在深度优先搜索的过程中，每个搜索到的 1 都会被重新标记为 0,最终岛屿的数量就是我们进行深度优先搜索的次数
+``` C++
+void dfs(vector<vector<char>>& grid,int n,int m)
+    {
+        grid[n][m]='0';
+        int rows=grid.size();
+        int cols=grid[0].size();
+        if (n>=1&&grid[n-1][m]=='1') dfs(grid,n-1,m);
+        if (n<rows-1&&grid[n+1][m]=='1') dfs(grid,n+1,m);
+        if (m>=1&&grid[n][m-1]=='1') dfs(grid,n,m-1);
+        if (m<cols-1&&grid[n][m+1]=='1') dfs(grid,n,m+1);
+
+    }
+    int numIslands(vector<vector<char>>& grid) 
+    {
+          int res=0;
+          int rows=grid.size();
+          int cols=grid[0].size();
+          for (int i=0;i<rows;i++)
+          {
+              for (int j=0;j<cols;j++)
+              {
+                  if (grid[i][j]=='1')
+                  {
+                   res++;
+                   dfs(grid,i,j);
+                  }
+              }
+          }
+          return res;
+    }
+``` 
+## <center>例题44 零钱兑换</center>
+* 题目描述：给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。你可以认为每种硬币的数量是无限的。 https://leetcode-cn.com/problems/coin-change/
+>>**学习点1**: 动态规划
+``` C++
+int coinChange(vector<int>& coins, int amount)  //零钱兑换
+{
+	vector<int>dp(amount + 1, amount + 1);
+	dp[0] = 0;
+	for (int i = 1; i < dp.size(); i++)
+	{
+		for (int j = 0; j < coins.size(); j++)
+		{
+			if (i >= coins[j])
+			dp[i] = min(dp[i], 1 + dp[i - coins[j]]);
+
+		}		
+	}
+	if (dp[amount] > amount)
+		return -1;
+	return dp[amount];
+}
+```
+## <center>例题45 旋转图像</center>
+* 题目描述：给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。https://leetcode-cn.com/problems/rotate-image/
+>>**学习点1**: 先以对角线翻转，再以中心左右翻转
+>>**学习点1**: vector<int>a;vector<int>b; a=b 值拷贝
+``` C++
+void rotate(vector<vector<int>>& matrix) // 原地旋转图像，先以对角线翻转，再以中心左右翻转
+{
+	int rows = matrix.size();
+	int cols = rows;
+	int temp;
+	for (int i = 0; i < rows; i++)  // 对角线翻转
+	{
+		for (int j = i; j < cols; j++)
+		{
+			temp = matrix[i][j];
+			matrix[i][j] = matrix[j][i];
+			matrix[j][i] = temp;
+		}		
+	}
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j=0;j<cols/2;j++)
+		{
+			swap(matrix[i][j],matrix[i][cols-j-1]);
+		}
+	}
+
+}
 ```

@@ -3,7 +3,8 @@
 ``` C++  20200921
 class Solution {
 public:
-    bool hasCycle(ListNode *head) {
+    bool hasCycle(ListNode *head) 
+	{
         
         ListNode *fast=head;
         ListNode *slow=head;
@@ -801,8 +802,74 @@ void digui(ListNode* root)
          digui(head);
     }
 ```
+## <center>例题21 合并K个升序链表</center>
+* 题目描述：给你一个链表数组，每个链表都已经按升序排列。请你将所有链表合并到一个升序链表中，返回合并后的链表
+>>**学习点1**: 方法一 利用两两合并； 方法二 利用一个自定义的优先队列维护
+>>**学习点2**: 自定义优先队列的比较方式
+``` C++ 方法一
+ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)  // 利用两两合并
+    {
+         if (l1 == nullptr&&l2 == nullptr)
+		return nullptr;
+	ListNode* dummyNode = new ListNode(-1);
+	ListNode* pre = dummyNode;
+	while (l1 != nullptr && l2 != nullptr)
+	{
+		if (l1->val > l2->val)
+		{
+			pre->next = l2;
+			l2 = l2->next;
+			pre = pre->next;
+		}
+		else
+		{
+			pre->next = l1;
+			l1 = l1->next;
+			pre = pre->next;
+		}
+	}
+	if (l1 == nullptr) pre->next = l2;
+	if (l2 == nullptr) pre->next = l1;
+	return dummyNode->next;
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) 
+    {
+          ListNode* head=nullptr;
+          for (int i=0;i<lists.size();i++)
+          {
+              head=mergeTwoLists(head,lists[i]);
+          }
+          return head;
 
-
-
-
+    }
+```
+``` C++
+    struct cmp
+    {
+		bool operator()(ListNode* a, ListNode* b) //返回true时，a的优先级低于b的优先级（a排在b的后面）
+		{
+			return a->val > b->val;
+		}
+    };
+ListNode* mergeKLists(vector<ListNode*>& lists) //利用一个自定义的优先队列维护
+{
+	priority_queue < ListNode*, vector<ListNode*>, cmp> qu;
+	for (int i = 0; i < lists.size(); i++)
+	{
+		if (lists[i])
+		qu.push(lists[i]);
+	}
+	ListNode* dummyNode = new ListNode(-1);
+	ListNode* pre = dummyNode;
+	while (!qu.empty())
+	{
+		ListNode* to = qu.top();
+		qu.pop();
+		pre->next = to;
+		pre = pre->next;
+		if (to->next != nullptr) qu.push(to->next);
+	}
+	return dummyNode->next;
+}
+```
 
