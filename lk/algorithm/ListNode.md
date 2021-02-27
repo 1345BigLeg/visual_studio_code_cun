@@ -872,4 +872,35 @@ ListNode* mergeKLists(vector<ListNode*>& lists) //利用一个自定义的优先
 	return dummyNode->next;
 }
 ```
-
+## <center>例题22 分割链表</center>
+* 题目描述：编写程序以 x 为基准分割链表，使得所有小于 x 的节点排在大于或等于 x 的节点之前。如果链表中包含 x，x 只需出现在小于 x 的元素之后。分割元素 x 只需处于“右半部分”即可，其不需要被置于左右两部分之间 （题目要求是只要把小于x的数移动到所有x的左方就行,没有顺序要求，而且等于x,大于x这些元素没有要求） https://leetcode-cn.com/problems/partition-list-lcci/comments/ 
+>>**学习点1**:维护两个链表 small 和 big ，small 链表按顺序存储所有小于 x 的节点，big 链表按顺序存储所有大于等于 x 的节点
+``` C++
+ ListNode* partition(ListNode* head, int x) 
+    {
+           if (head==nullptr)
+           return nullptr;
+           ListNode* smallNode=new ListNode(-1);
+           ListNode* small=smallNode;
+           ListNode* bigNode=new ListNode(-1);
+           ListNode* big=bigNode;
+           while (head!=nullptr)
+           {
+               if (head->val<x)
+               {
+                   small->next=head;
+                   small=small->next;
+                   head=head->next;
+               }
+               else
+               {
+                   big->next=head;
+                   big=big->next;
+                   head=head->next;
+               }
+           }
+           small->next=bigNode->next;
+           big->next=nullptr;
+           return smallNode->next;
+    }
+```

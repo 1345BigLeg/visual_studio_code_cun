@@ -1481,3 +1481,136 @@ void rotate(vector<vector<int>>& matrix) // 原地旋转图像，先以对角线
 
 }
 ```
+## <center>例题46 圆圈中最后剩下的数字</center>
+* 题目描述：0,1,···,n-1这n个数字排成一个圆圈，从数字0开始，每次从这个圆圈里删除第m个数字（删除后从下一个数字开始计数）。求出这个圆圈里剩下的最后一个数字 https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/
+>>**学习点1**: 方法一 暴力解法(超时)
+>>**学习点1**: 逆推，找出最后一个数字在最开始数组的索引
+``` C++ 约瑟夫环问题
+int lastRemaining(int n, int m) // 暴力解法
+{
+	vector<int>res(n);
+	for (int i = 0; i < n; i++)
+	{
+		res[i]=i;
+	}
+	int index = 0;
+	while (res.size() != 1)
+	{
+		index = index + m - 1;
+		/*while (index >= res.size())
+		{
+			index -= res.size();
+		}*/
+		index=index%res.size();
+		res.erase(res.begin()+index);
+	}
+	return res.front();
+}
+```
+``` C++ 方法二 数学方法
+int lastRemaining(int n, int m) 
+{
+        int x = 0;
+        for (int i = 2; i <= n; i++) 
+		{
+            x = (x + m) % i;
+        }
+        return x;
+}
+```
+## <center>例题47 扑克牌中的顺子</center>
+* 题目描述：从扑克牌中随机抽5张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。https://leetcode-cn.com/problems/bu-ke-pai-zhong-de-shun-zi-lcof/
+>>**学习点1**: 这道题思路需满足两点 1 除大小王外，所有牌无重复；2 最大的牌为max ，最小的牌为min ，需满足：max - min < 5
+``` C++
+bool isStraight(vector<int>& nums) //扑克牌中的顺子
+{
+	unordered_set<int>sz;
+	int maxv= -1;
+	int minv = 14;
+	for (int i = 0; i < nums.size(); i++)
+	{
+		if (nums[i] == 0) continue;
+		if (sz.find(nums[i]) == sz.end())
+		{
+			sz.insert(nums[i]);
+			maxv = max(maxv,nums[i]);
+			minv = min(minv,nums[i]);
+		}
+		else
+			return false;
+	}
+	if (maxv - minv < 5) return true;
+	else
+		return false;
+}
+```
+## <center>例题48 栈的压入、弹出序列</center>
+* 题目描述：输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列 https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/
+>>**学习点1**: 判断合不合法，用个栈试一试: 把压栈的元素按顺序压入，当栈顶元素和出栈的第一个元素相同，则将该元素弹出，出栈列表指针后移并继续判断。最后判断出栈列表指针是否指向出栈列表的末尾即可
+``` C++
+bool validateStackSequences(vector<int>& pushed, vector<int>& popped) // 栈的压入、弹出序列
+{
+	stack<int>simu;
+	int index = 0;
+	for (int i=0;i<pushed.size();i++)
+	{
+		simu.push(pushed[i]);
+		while (!simu.empty()&&simu.top()==popped[index])
+		{
+			simu.pop();
+			index++;
+		}
+
+	}
+	return index == popped.size();  // return simu.empty();
+	
+}
+```
+## <center>例题49 求1+2+3+……+n</center>
+* 题目描述：求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C） https://leetcode-cn.com/problems/qiu-12n-lcof/
+>>**学习点1**: 
+``` C++
+ int sumNums(int n)   // 方法一
+    {
+        char arr[n][n+1];           
+        return sizeof(arr)>>1;
+    }
+ int sumNums(int n)  // 方法二
+   {
+        int res = n;
+        n && (res += sumNums(n-1));
+        return res;
+    }
+```
+## <center>例题50 矩阵中的路径</center>
+* 题目描述：请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。https://leetcode-cn.com/problems/ju-zhen-zhong-de-lu-jing-lcof/
+>>**学习点1**:本问题是典型的矩阵搜索问题，可使用 深度优先搜索（DFS）+ 剪枝解决
+``` C++
+bool dfs(vector<vector<char>>& board, string word, int rows, int cols, int index)
+{
+	if (rows >= board.size() || rows < 0 || cols < 0 || cols >= board[0].size()) return false;
+	if (board[rows][cols] != word[index])
+		return false;
+	if (index == word.size() - 1)
+		return true;	
+	board[rows][cols] = '\0';
+	bool res = dfs(board, word, rows + 1, cols, index + 1) || dfs(board, word, rows - 1, cols, index + 1)
+		|| dfs(board, word, rows, cols - 1, index + 1) || dfs(board, word, rows, cols + 1, index + 1);
+	board[rows][cols] = word[index];
+	return res;
+}
+bool exist(vector<vector<char>>& board, string word) // 矩阵中的路径
+{
+	int rows = board.size();
+	int cols = board[0].size();
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (dfs(board, word, i, j, 0))
+				return true;
+		}
+	}
+	return false;
+}
+```
