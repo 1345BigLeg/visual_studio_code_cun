@@ -1614,3 +1614,230 @@ bool exist(vector<vector<char>>& board, string word) // 矩阵中的路径
 	return false;
 }
 ```
+## <center>例题51 把数字翻译成字符串</center>
+* 题目描述：给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法 https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/
+>>**学习点1**: 见题解评论
+>>**学习点2**: 边界条件要考虑满足通式
+``` C++
+int translateNum(int num) // 把数字翻译成字符串
+{
+	if (num == 0)
+		return 0;
+	string s = to_string(num);
+	int size = s.size();
+	vector<int>dp(size + 1, 1);
+	dp[0] = 1;         // 为了满足通式
+	dp[1] = 1;
+	for (int i = 2; i < dp.size(); i++)
+	{
+		int temp = atoi(s.substr(i - 2, 2).c_str());
+		if (temp >= 10 && temp <= 25)
+		{
+			dp[i] = dp[i - 1] + dp[i-2];
+		}
+		else
+			dp[i] = dp[i - 1];
+	}
+	return dp[size];
+}
+```
+## <center>例题52 机器人的运动范围</center>
+* 题目描述：地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？https://leetcode-cn.com/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof/
+>>**学习点1**:深度优先遍历(dfs)
+``` C++
+int dfs(int m, int n, int k, int rows, int cols, vector<vector<bool>>& help)
+{
+	if (rows >= m || rows < 0 || cols >= n || cols<0 || rows / 10 + rows % 10 + cols / 10 + cols % 10 > k ||
+		help[rows][cols] == false) return 0;
+	help[rows][cols] = false;
+	int a = dfs(m, n, k, rows + 1, cols, help);
+	int b = dfs(m, n, k, rows, cols + 1, help);
+	int c = dfs(m, n, k, rows - 1, cols, help);
+	int d = dfs(m, n, k, rows, cols - 1, help);
+	return a + b + c + d + 1;
+
+}
+int movingCount(int m, int n, int k)  // 机器人的运动范围
+{
+	vector<vector<bool>>help(m, vector<bool>(n, true));
+	return dfs(m, n, k, 0, 0, help);
+}
+```
+## <center>例题52 把数组排成最小的数</center>
+* 题目描述：输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个 https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/
+>>**学习点1**:有两个字符串str1和str2，其中str1"小于"str2的表示方法是str1 + str2 < str2 + str1
+>>**学习点2**:把对应整数的字符串放到容器vector中，自定义比较规则，这道题是把最小字符串放到高位(前面)，所以用学习点1的比较规则自定义排序
+``` C++
+string minNumber(vector<int>& nums) // 把数组排成最小的数
+{
+	string res = "";
+	vector<string>temp;
+	for (int i = 0; i < nums.size(); i++)
+	{
+		temp.push_back(to_string(nums[i]));
+	}
+	sort(temp.begin(), temp.end(), [](string &a, string &b)
+	{
+		
+		return a + b < b + a;
+	}
+	);
+	for (int i = 0; i < temp.size(); i++)
+	{
+		res += temp[i];
+	}
+	return res;
+}
+```
+## <center>例题53 n个骰子的点数</center>
+* 题目描述：把n个骰子扔在地上，所有骰子朝上一面的点数之和为s。输入n，打印出s的所有可能的值出现的概率 https://leetcode-cn.com/problems/nge-tou-zi-de-dian-shu-lcof/
+>>**学习点1**:动态规划 1 表示状态 2 找出状态转移方程 3 边界处理
+>>**学习点2**:
+``` C++
+vector<double> dicesProbability(int n)  // n个骰子的点数
+{
+	vector<double>res;
+	vector<vector<int>>dp(n+1, vector<int>(6 * n + 1, 0)); //dp[i][j]表示：当有i个骰子时，点数和为j出现的个数
+	for (int i = 1; i <=6; i++)
+	{
+		dp[1][i] = 1;
+	}
+	for (int i = 2; i <=n; i++)
+	{
+		for (int j = i;j <=6*n; j++)
+		{
+			for (int k = 1; k <= 6; k++)
+			{
+				if (j-k>0)
+				{
+					dp[i][j] += dp[i - 1][j - k];  // 状态转移方程
+				}
+				else
+					break;
+			}
+		}
+	}
+	for (int i = n; i <=6*n; i++)
+	{
+		res.push_back(dp[n][i] * 1.0 / pow(6, n));
+	}
+	return res;
+}
+```
+## <center>例题54 翻转单词顺序</center>
+* 题目描述：输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I" https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/
+>>**学习点1**:stringstream 的使用
+``` C++
+string reverseWords(string s)  //翻转单词顺序
+{
+	stringstream ss(s);
+	stack<string>dd;   // 使用栈来反过来
+	string temp;
+	string res;
+	while (ss >> temp)
+	{
+		dd.push(temp);
+		dd.push(" ");
+	}
+	if (!dd.empty())
+	{
+		dd.pop();
+	}
+	while (!dd.empty())
+	{
+		res += dd.top();
+		dd.pop();
+	}
+	return res;
+}
+``` 
+## <center>例题55 数字序列中某一位的数字</center>
+* 题目描述：数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。请写一个函数，求任意第n位对应的数字 https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/ 
+>>**学习点1**:这是一道找规律题 第一步找到这个数字在序列中对应的是几位数 ；第二步：找到这个目标数；第三步：确定目标数字在这个目标数的第几位
+``` C++
+int findNthDigit(int n) //数字序列中某一位的数字
+{
+	int temn = n;
+	int digits = 1;   // 这个数字在序列中对应的是几位数
+	
+	long base = 9;
+	while (n - base * digits > 0)
+	{
+		n = n - base * digits;
+		digits++;
+		base = base * 10;
+	}
+	long number = 1;
+	for (int i = 1; i < digits; i++)
+	{
+		number *= 10;
+	}
+	number += (n%digits == 0) ? n / digits - 1 : n / digits;    //找到目标数 number
+
+	// 从目标数中找到想要的那个数字
+	if (n%digits == 0) return number % 10;
+	int index = n % digits;  // index代表目标数的第几个数字
+	for (int i = 0; i < digits-index; i++)
+	{
+		number /= 10;
+	}
+	return number%10;
+
+}
+```
+## <center>例题56 数值的整数次方</center>
+* 题目描述：实现函数double Power(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不需要考虑大数问题 https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/
+>>**学习点1**:当n为偶数，即求两个指数为n/2的快速幂的积；当n为奇数，即求两个指数为n/2的快速幂的积再乘1个底数
+``` C++
+double myPow(double x, int n) //数值的整数次方
+{
+	if (n == 0) return 1;
+	if (n == 1) return x;
+	if (n == -1) return 1 / x;
+	double half = myPow(x, n / 2);
+	double mod = myPow(x, n % 2);
+	return half * half*mod;
+}
+```
+## <center>例题57 复杂链表的复制</center>
+* 题目描述：请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/
+>>**学习点1**:见注释
+``` C++
+Node* copyRandomList(Node* head)  // 复杂链表的复制
+{
+	if (head == nullptr)
+	{
+		return nullptr;
+	}
+	Node* temp = head;
+	while (temp != nullptr)     // 复制next指针
+	{
+		Node* tt = new Node(temp->val);
+		tt->next = temp->next;
+		temp->next = tt;
+		temp = temp->next->next;
+	}
+	Node* temprandom = head;
+	while (temprandom != nullptr)  // 复制random指针
+	{
+		if (temprandom->random != nullptr)
+		{
+			temprandom->next->random = temprandom->random->next;   // 这个点不好想
+		}
+		temprandom = temprandom->next->next;
+	}
+	Node* ttmep = head;     // 原来的链表和复制链表分离
+	Node* cur = head;
+	Node* res = new Node(-1);
+	Node* ha = res;
+	while (ttmep != nullptr)
+	{
+		res->next = ttmep->next;
+		res = res->next;
+		ttmep = ttmep->next->next; 
+		cur->next = ttmep;   // 这道题还要把原来链表的顺序恢复过来否则出错 恶心
+		cur = cur->next;
+	}
+	return ha->next;
+}
+```
