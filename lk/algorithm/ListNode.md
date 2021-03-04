@@ -904,3 +904,45 @@ ListNode* mergeKLists(vector<ListNode*>& lists) //利用一个自定义的优先
            return smallNode->next;
     }
 ```
+## <center>例题23 复杂链表的复制</center>
+* 题目描述：请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/
+>>**学习点1**:见注释
+``` C++
+Node* copyRandomList(Node* head)  // 复杂链表的复制
+{
+	if (head == nullptr)
+	{
+		return nullptr;
+	}
+	Node* temp = head;
+	while (temp != nullptr)     // 复制next指针
+	{
+		Node* tt = new Node(temp->val);
+		tt->next = temp->next;
+		temp->next = tt;
+		temp = temp->next->next;
+	}
+	Node* temprandom = head;
+	while (temprandom != nullptr)  // 复制random指针
+	{
+		if (temprandom->random != nullptr)
+		{
+			temprandom->next->random = temprandom->random->next;   // 这个点不好想
+		}
+		temprandom = temprandom->next->next;
+	}
+	Node* ttmep = head;     // 原来的链表和复制链表分离
+	Node* cur = head;
+	Node* res = new Node(-1);
+	Node* ha = res;
+	while (ttmep != nullptr)
+	{
+		res->next = ttmep->next;
+		res = res->next;
+		ttmep = ttmep->next->next; 
+		cur->next = ttmep;   // 这道题还要把原来链表的顺序恢复过来否则出错 恶心
+		cur = cur->next;
+	}
+	return ha->next;
+}
+```
