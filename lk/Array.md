@@ -1799,45 +1799,162 @@ double myPow(double x, int n) //数值的整数次方
 	return half * half*mod;
 }
 ```
-## <center>例题57 复杂链表的复制</center>
-* 题目描述：请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/
->>**学习点1**:见注释
+## <center>例题57 丑数</center>
+* 题目描述：我们把只包含质因子 2、3 和 5 的数称作丑数（Ugly Number）。求按从小到大的顺序的第 n 个丑数 https://leetcode-cn.com/problems/chou-shu-lcof/ 
+>>**学习点1**: 三指针 不是动态规划，详见评论第一条
 ``` C++
-Node* copyRandomList(Node* head)  // 复杂链表的复制
+int nthUglyNumber(int n) // 丑数
 {
-	if (head == nullptr)
+	if (n <= 0)
+		return 0;
+	vector<int>dd(n);
+	dd[0] = 1;
+	int i = 0, j = 0, k = 0;
+	for (int o = 1; o < n; o++)
 	{
-		return nullptr;
+		int temp = min(dd[i]*2,min(dd[j]*3,dd[k]*5));
+		if (temp == dd[i] * 2) i++;
+		if (temp == dd[j] * 3) j++;
+		if (temp == dd[k] * 5) k++;
+		dd[o] = temp;
 	}
-	Node* temp = head;
-	while (temp != nullptr)     // 复制next指针
+	return dd[n-1];
+}
+```
+## <center>例题58 把字符串转换成整数</center>
+* 题目描述：见链接 https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/
+>>**学习点1**: 自己写的
+``` C++
+int fir(string str)    // 找到第一个数字所在的索引
+{
+	for (int i = 0; i < str.size(); i++)
 	{
-		Node* tt = new Node(temp->val);
-		tt->next = temp->next;
-		temp->next = tt;
-		temp = temp->next->next;
-	}
-	Node* temprandom = head;
-	while (temprandom != nullptr)  // 复制random指针
-	{
-		if (temprandom->random != nullptr)
+		char a = str[i];
+		if (a != ' ')
 		{
-			temprandom->next->random = temprandom->random->next;   // 这个点不好想
-		}
-		temprandom = temprandom->next->next;
+			if (a == '+' || a == '-' || (a <= '9'&&a >= '0'))
+			{
+				return i;
+
+			}
+			else
+				return -1;
+		}		
 	}
-	Node* ttmep = head;     // 原来的链表和复制链表分离
-	Node* cur = head;
-	Node* res = new Node(-1);
-	Node* ha = res;
-	while (ttmep != nullptr)
+	return -1;
+}
+int la(string str)   找到最后一位数字所在索引
+{
+	for (int i = str.size()-1; i >=0; i--)
 	{
-		res->next = ttmep->next;
-		res = res->next;
-		ttmep = ttmep->next->next; 
-		cur->next = ttmep;   // 这道题还要把原来链表的顺序恢复过来否则出错 恶心
-		cur = cur->next;
+		char a = str[i];
+		if (a <= '9'&&a >= '0')
+		{
+			return i;
+		}
 	}
-	return ha->next;
+	return -1;
+}
+int strToInt(string str) // 把字符串转换成整数
+{
+	if (str.empty())
+		return 0;
+	int first = fir(str);
+	int last = la(str);
+	if (first == -1 || last == -1)
+	{
+		return 0;
+	}
+	string s = str.substr(first, last - first + 1); // 找到代表数字的子字符串
+	stringstream ss;   //转换成int
+	ss << s;
+	int res;
+	ss >> res;
+	return res;
+}
+```
+## <center>例题59 汉明距离</center>
+* 题目描述：两个整数之间的汉明距离指的是这两个数字对应二进制位不同的位置的数目。给出两个整数 x 和 y，计算它们之间的汉明距离 https://leetcode-cn.com/problems/hamming-distance/
+>>**学习点1**: 位运算
+``` C++
+int hammingDistance(int x, int y) // 汉明距离
+{
+	int a = x ^ y;
+	int res = 0;
+	while (a!=0)
+	{
+		if (a & 1 != 0)
+		{
+			res++;			
+		}
+		a=a >> 1;
+	}
+	return res;
+}
+```
+## <center>例题60 打家劫舍二</center>
+* 题目描述：你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。给定一个代表每个房屋存放金额的非负整数数组，计算你 在不触动警报装置的情况下 ，能够偷窃到的最高金额。https://leetcode-cn.com/problems/house-robber-ii/
+ 
+>>**学习点1**:环状排列意味着第一个房子和最后一个房子中只能选择一个偷窃，所以可以把环状排列房间问题 分解 为两个单排排列房间子问题(打家劫舍一)，即 一个是从0到n-1，另一个是从1到n，转换为单排排列房间(打家劫舍一)，求的是这两个单排排列房间的最大值
+``` C++
+int rob1(vector<int>& nums)  // 打家劫舍一
+{
+	if (nums.empty())
+	{
+		return 0;
+	}
+	int size = nums.size();
+	if (size == 1)
+		return nums.front();
+	vector<int>dp(size);
+	dp[0] = nums[0];
+	dp[1] = max(nums[0],nums[1]);
+	for (int i = 2; i < size; i++)
+	{
+		dp[i] = max(dp[i-2]+nums[i],dp[i-1]);
+	}
+	return dp[size-1];
+}
+int rob2(vector<int>& nums) //打家劫舍二
+{
+	if (nums.size() == 1)    // 考虑只有一个值的情况
+		return nums.front();
+	vector<int>a(nums.begin(),nums.end()-1);
+	vector<int>b(nums.begin()+1,nums.end());
+	return max(rob1(a),rob1(b));
+}
+```
+## <center>例题61 打家劫舍三</center>
+* 题目描述:在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。计算在不触动警报的情况下，小偷一晚能够盗取的最高金额 https://leetcode-cn.com/problems/house-robber-iii/
+>>**学习点1**: 1. 对于一个以 node 为根节点的二叉树而言，如果尝试偷取 node 节点，那么势必不能偷取其左右子节点，然后继续尝试偷取其左右子节点的左右子节点; 2. 如果不偷取该节点，那么只能尝试偷取其左右子节点; 3. 比较两种方式的结果，谁大取谁。
+``` C++
+unordered_map<TreeNode*, int>s;
+int retrot(TreeNode* root)  //尝试对以 node 为根节点的二叉树进行偷取，返回符合题意偷取的最大值
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+	if (s.count(root) != 0)   // 避免不必要的重复计算，否则会有节点被重复计算
+	{
+		return s[root];
+	}
+	int f = 0;
+	if (root->left != nullptr)
+	{
+		f = f+retrot(root->left->left)+ retrot(root->left->right);
+	}
+	if (root->right != nullptr)
+	{
+		f = f+retrot(root->right->left) + retrot(root->right->right);
+	}
+	f += root->val;
+	int l = retrot(root->left)+retrot(root->right);
+	s[root] = max(f,l);
+	return max(f,l);
+}
+int rob3(TreeNode* root) // 打家劫舍三
+{
+	return retrot(root);
 }
 ```
