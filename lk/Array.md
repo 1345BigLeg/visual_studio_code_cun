@@ -2006,3 +2006,46 @@ vector<int>res(num+1);
        return res;
     }
 ```
+## <center>例题63 目标和 (背包问题)</center>
+* 题目描述：给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。返回可以使最终数组和为目标数 S 的所有添加符号的方法数 https://leetcode-cn.com/problems/target-sum/
+>>**学习点1**：背包问题 动态规划
+``` C++
+int findTargetSumWays(vector<int>& nums, int S)
+{
+	int sum = 0;
+	for (auto num : nums)
+	{
+		sum += num;
+	}
+	if (S > sum)
+	{
+		return 0;
+	}
+	if ((sum + S) % 2 != 0)
+	{
+		return 0;
+	}
+	int res = (sum + S) / 2;   // 转换为背包问题，从数组nums中，选取元素，使元素和为res，求有多少种求法
+	vector<vector<int>>dp(nums.size()+1,vector<int>(res+1,0));// dp[i][j]代表：前n个元素，填满j（包括j）这么大容积的包，所需要的方法
+	for (int i = 0; i < dp.size(); i++)
+	{
+		dp[i][0] = 1;
+	}
+	for (int i = 1; i < dp.size(); i++)
+	{
+		for (int j = 0; j <=res; j++)
+		{
+			if (j >= nums[i-1])
+			{
+				dp[i][j] = dp[i - 1][j] + dp[i - 1][j - nums[i-1]]; // i从 1---nums.size(),所以要 i-1为索引
+			}
+			else
+			{
+				dp[i][j] = dp[i - 1][j];
+			}
+		}
+	}
+
+	return dp[nums.size()][res];
+}
+```
