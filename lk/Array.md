@@ -1958,3 +1958,51 @@ int rob3(TreeNode* root) // 打家劫舍三
 	return retrot(root);
 }
 ```
+## <center>例题62 比特位计数</center>
+* 题目描述：给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回 https://leetcode-cn.com/problems/counting-bits/
+>>**学习点1**： 方法三 ：i >> 1会把最低位去掉，因此i >> 1 也是比i小的，同样也是在前面的数组里算过。当 i 的最低位是0，则 i 中1的个数和i >> 1中1的个数相同；当i的最低位是1，i 中1的个数是 i >> 1中1的个数再加1
+``` C++
+// 方法一 库函数
+ vector<int> countBits(int num) {
+vector<int>res(num+1);
+	for (int i = 0; i <= num; i++)
+	{
+		res[i]=__builtin_popcount(i);
+	}
+	return res;
+    }
+// 方法二 自己实现库函数的作用	
+ int count(int a)
+{
+	int res = 0;
+	while (a != 0)
+	{
+		if (a & 1 != 0)
+		{
+			res++;
+		}
+		a = a >> 1;
+	}
+	return res;
+}
+    vector<int> countBits(int num) 
+    {
+          vector<int>res(num+1);
+	for (int i = 0; i <= num; i++)
+	{
+		res[i] = count(i);
+	}
+	return res;
+    }
+// 方法三 答案提供解法 
+ vector<int> countBits(int num) 
+    {
+       vector<int>res(num+1);
+       res[0]=0;
+       for (int i=1;i<=num;i++)
+       {
+           res[i]=res[i>>1]+(i&1); //注意i&1需要加括号
+       }
+       return res;
+    }
+```
