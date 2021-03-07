@@ -2049,3 +2049,74 @@ int findTargetSumWays(vector<int>& nums, int S)
 	return dp[nums.size()][res];
 }
 ```
+## <center>例题64 字母异位词分组</center> (我的第200道题)
+* 题目描述：给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串 https://leetcode-cn.com/problems/group-anagrams/
+>>**学习点1**： 哈希，自己没有想到
+``` C++
+vector<vector<string>> groupAnagrams(vector<string>& strs) // 字母异位词分组
+{
+	if (strs.empty())
+	{
+		return {};
+	}
+	unordered_map<string, vector<string>>mp;
+	for (int i = 0; i < strs.size(); i++)
+	{
+		string tmp = strs[i];
+		sort(tmp.begin(),tmp.end());
+		mp[tmp].push_back(strs[i]);
+	}
+	vector<vector<string>> res;
+	for (auto num:mp)
+	{
+		res.push_back(num.second);
+	}
+	return res;
+}
+```
+## <center>例题65 字符串解码</center> 
+* 题目描述：给定一个经过编码的字符串，返回它解码后的字符串。编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。 https://leetcode-cn.com/problems/decode-string/
+>>**学习点1**：有括号的匹配，考虑栈
+``` C++
+string decodeString(string s) // 字符串解码
+{
+	if (s.empty())
+	{
+		return "";
+	}
+	stack<int>num;
+	stack<string>ss;
+	string res = "";
+	int n=0;
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] >= '0'&&s[i] <= '9')
+		{
+			n = n * 10 + s[i] - '0';
+		}
+		else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+		{
+			res = res + s[i];
+		}
+		else if (s[i] == '[') //碰到'[' 把数字和当前字符串入栈
+		{
+			num.push(n);
+			n = 0;
+			ss.push(res);
+			res = "";
+		}
+		else if (s[i] == ']') // 碰到']'把数字和字符串出栈
+		{
+			int count = num.top();
+			for (int j = 0; j < count; j++)
+			{
+				ss.top() += res;
+			}
+			res = ss.top();
+			num.pop();
+			ss.pop();
+		}
+	}
+	return res;
+}
+```
