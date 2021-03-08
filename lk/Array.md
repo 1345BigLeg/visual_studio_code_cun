@@ -2120,3 +2120,24 @@ string decodeString(string s) // 字符串解码
 	return res;
 }
 ```
+## <center>例题66 最佳买卖股票时机含冷冻期</center> 
+* 题目描述：给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天) 。 https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+>>**学习点1**： 不好想啊
+``` C++
+int maxProfit(vector<int>& prices)  //最佳买卖股票时机含冷冻期
+{
+	if (prices.empty())
+	{
+		return 0;
+	}
+	vector<vector<int>>dp(prices.size(),vector<int>(3,0)); // dp[i] 代表第i天结束后的最大利润
+	dp[0][0] = -prices[0];                                                 
+	for (int i = 1; i < prices.size(); i++)                               
+	{
+		dp[i][0] = max(dp[i-1][0],dp[i-1][1]-prices[i]);   // dp[i][0] 代表第i天结束后持有股票的最大利润
+		dp[i][1] = max(dp[i-1][1],dp[i-1][2]);            // dp[i][1] 代表第i天结束后不持有股票的最大利润，且可以买入
+		dp[i][2] = dp[i - 1][0] + prices[i];             // dp[i][2] 代表第i天结束后不持有股票的最大利润，且不可以买入
+	}                    
+	return max(dp[prices.size()-1][1], dp[prices.size() - 1][2]);
+} 
+```
