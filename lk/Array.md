@@ -2141,3 +2141,27 @@ int maxProfit(vector<int>& prices)  //最佳买卖股票时机含冷冻期
 	return max(dp[prices.size()-1][1], dp[prices.size() - 1][2]);
 } 
 ```
+## <center>例题67 最大正方形</center> 
+* 题目描述：在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积 https://leetcode-cn.com/problems/maximal-square/
+>>**学习点1**：以 matrix(i - 1, j - 1) 为 右下角 的正方形的最大边长是由右上，左下，左上三块符合题意区域的正方形边长最小值加1.
+``` C++
+int maximalSquare(vector<vector<char>>& matrix) 
+    {
+   int rows = matrix.size();
+	int cols = matrix[0].size();
+	vector<vector<int>>dp(rows+1,vector<int>(cols+1,0));//dp(i, j) 是以 matrix(i - 1, j - 1) 为 右下角 的正方形的最大边长
+	int res = 0;
+	for (int i = 1; i <= rows; ++i) 
+	{
+		for (int j = 1; j <= cols; ++j) 
+		{
+			if (matrix[i - 1][j - 1] == '1') 
+			{
+				dp[i][j] = 1 + min(dp[i - 1][j - 1],min(dp[i - 1][j], dp[i][j - 1]));
+				res = max(res, dp[i][j]);
+			}
+		}
+	}
+	return res * res;
+    }
+```
